@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">    
+    <!-- Bootstrap CSS --> 
+    <style>
+       .nav-link {
+          cursor:pointer;
+       }
+       body {
+         font-family: 'Roboto', sans-serif;
+         margin: 0 0 0 0;
+         padding: 0 0 0 0;
+         border: 0;
+       }
+       label .active{
+         background-color: green;
+       }
+       hr {
+         margin: 0;
+         padding: 0; 
+       }
+    </style>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+  </head>
+  <body>    
+    <div class="container">
+      <div id="app">
+         <!-- Content here -->             
+      </div> 
+     <!-- 
+     <div>
+     <button onclick='getOAuthToken()'>Select a file</button>
+     <p id='result'></p>
+     </div>
+     -->
+    </div>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script>
+   
+   
+   function grant(country){
+      if(country == "FR"){
+         loadSearchView();
+         photo();
+      }else{
+         loadNoAccessView();      
+      }   
+   }
+   
+   $(document).ready(function() {
+     loadSearchView();
+     photo();
+   });
+   
+   
+   function photo(){
+      google.script.run.withSuccessHandler(
+         function(url){
+            document.getElementById("photo").src = url;
+         }     
+      ).test();
+     
+   }
+   
+   
+    function setDataForSearch(){
+       google.script.run.withSuccessHandler(
+         function(dataReturned){
+            data = dataReturned.slice();
+            search();
+         }     
+       ).getDataForSearch();
+    }
+    
+    function carrousel(){
+      var timer = 4000;
+      var i = 0;
+      var max = $('#c > li').length; 
+      $("#c > li").eq(i).addClass('active').css('left','0');
+      $("#c > li").eq(i + 1).addClass('active').css('left','25%');
+      $("#c > li").eq(i + 2).addClass('active').css('left','50%');
+      $("#c > li").eq(i + 3).addClass('active').css('left','75%');
+      setInterval(function(){ 
+          $("#c > li").removeClass('active');
+          $("#c > li").eq(i).css('transition-delay','0.25s');
+          $("#c > li").eq(i + 1).css('transition-delay','0.5s');
+          $("#c > li").eq(i + 2).css('transition-delay','0.75s');
+          $("#c > li").eq(i + 3).css('transition-delay','1s');
+          if (i < max-4) {
+              i = i+4; 
+          }else{ 
+              i = 0; 
+          }  
+          $("#c > li").eq(i).css('left','0').addClass('active').css('transition-delay','1.25s');
+          $("#c > li").eq(i + 1).css('left','25%').addClass('active').css('transition-delay','1.5s');
+          $("#c > li").eq(i + 2).css('left','50%').addClass('active').css('transition-delay','1.75s');
+          $("#c > li").eq(i + 3).css('left','75%').addClass('active').css('transition-delay','2s');	
+      }, timer); 
+    }
+    
+    function inputEventHandler(e){
+       if(e.target.matches("#searchInput")){
+          search();
+       }      
+    }
+    
+    function clickEventHandler(e){
+       if(e.target.matches("#plus")){
+          duplicateImg();
+          onApiLoad();
+       }
+    }
+    
+    function addPhoto(){
+      duplicateImg();
+      onApiLoad();
+    }
+    function duplicateImg(){ 
+      var templateBox = document.getElementById("photo");
+      var template = templateBox.content;
+      var photo = template.cloneNode(true);
+      document.getElementById("lesPhotos").appendChild(photo);
+    }
+  
+     function search(){
+        var searchInput = document.getElementById("searchInput").value.toString().toLowerCase().trim();
+        var selectCountry = $("#selectCountry :selected").text();
+        var searchWords = searchInput.split(/\s+/);
+        var searchColumns = [1,2];   
+        if(searchInput == ""){
+          var resultsArray = data;         
+        }else{
+           var resultsArray = searchInput === "" ? [] : data.filter(function(r){
+            return searchWords.every(function(word){
+              return searchColumns.some(function(colIndex){
+                return r[colIndex].toString().toLowerCase().indexOf(word) !== -1 // && r[2] == selectCountry;
+              }); 
+            });
+          });
+        }
+        var searchResultsBox = document.getElementById("searchResults");
+        var templateBox = document.getElementById("rowTemplate");
+        var template = templateBox.content;
+        searchResultsBox.innerHTML = "";
+        resultsArray.forEach(function(r){
+           var tr = template.cloneNode(true);
+           var custIdColumn = tr.querySelector(".custId");
+           var firstNameColumn = tr.querySelector(".firstName");
+           var lastNameColumn = tr.querySelector(".lastName");
+           var lastNameColumn2 = tr.querySelector(".lastSize");
+           var lastNameColumn3 = tr.querySelector(".lastType");
+           var lastNameColumn4 = tr.querySelector(".lastCA");
+           var buttonView = tr.querySelector(".view");
+           buttonView.addEventListener("click",loadPageView);
+           var buttonEdit = tr.querySelector(".edit");
+           buttonEdit.addEventListener("click",loadEditCustomerView);
+           custIdColumn.textContent = r[0];
+           firstNameColumn.textContent = r[1];
+           lastNameColumn.textContent = r[2];
+           lastNameColumn2.textContent = r[3];
+           lastNameColumn3.textContent = r[4];
+           lastNameColumn4.textContent = r[5];
+           searchResultsBox.appendChild(tr);
+         });
+      }  
+    
+    function loadView(options){
+       var id = typeof options.id === "undefined" ? "app" : options.id;
+       var cb = typeof options.callback === "undefined" ? function(){} : options.callback;     
+       google.script.run.withSuccessHandler(     
+         function(html){
+            document.getElementById(id).innerHTML = html;
+            typeof options.params === "undefined" ? cb() : cb(options.params);     
+         }     
+       )[options.func](); 
+    }  
+    
+    function loadHomeView(){
+       loadView({func: "loadHomeView", callback: photo});
+    }
+    function loadSearchView(){
+       loadView({func: "loadSearchView", callback: setDataForSearch});
+    }
+    function loadPageView(){
+       loadView({func: "loadPageView", callback: carrousel});
+    } 
+    function loadAddCustomerView(){
+       loadView({func: "loadAddCustomerView"});
+    }
+    function loadEditCustomerView(){
+       loadView({func: "loadEditCustomerView"});
+    }   
+    function loadNoAccessView(){
+       loadView({func: "loadNoAccessView"});
+    }   
+    
+  /*  document.getElementById("home-link").addEventListener("click",loadHomeView);  
+    document.getElementById("search-link").addEventListener("click",loadSearchView);
+    document.getElementById("page-link").addEventListener("click",loadPageView);
+    document.getElementById("add-customer-link").addEventListener("click",loadAddCustomerView);
+    document.getElementById("edit-link").addEventListener("click",loadEditCustomerView);
+     */
+
+    
+    document.getElementById("app").addEventListener("input",inputEventHandler);
+    document.getElementById("app").addEventListener("click",clickEventHandler);
+
+
+
+function handleFiles(files) {
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    var imageType = /^image\//;
+
+    if (!imageType.test(file.type)) {
+      continue;
+    }
+
+    var img = document.createElement("img");
+    img.classList.add("obj");
+    img.file = file;
+    var preview = document.getElementById("lesPhotos");
+    preview.appendChild(img); // En admettant que "preview" est l'élément div qui contiendra le contenu affiché.
+
+    var reader = new FileReader();
+    reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+    reader.readAsDataURL(file);
+  }
+}
+
+   // IMPORTANT: Replace the value for DEVELOPER_KEY with the API key obtained
+    // from the Google Developers Console.
+    var DEVELOPER_KEY = '<?!= PropertiesService.getScriptProperties().getProperty('API_KEY') ?>';
+    var DIALOG_DIMENSIONS = {width: 600, height: 425};
+    var pickerApiLoaded = false;
+    /**
+     * Loads the Google Picker API.
+     */
+    function onApiLoad() {
+      gapi.load('picker', {'callback': function() {
+        pickerApiLoaded = true;
+      }});
+     }
+
+    /**
+     * Gets the user's OAuth 2.0 access token from the server-side script so that
+     * it can be passed to Picker. This technique keeps Picker from needing to
+     * show its own authorization dialog, but is only possible if the OAuth scope
+     * that Picker needs is available in Apps Script. Otherwise, your Picker code
+     * will need to declare its own OAuth scopes.
+     */
+    function getOAuthToken() {
+      google.script.run.withSuccessHandler(createPicker)
+          .withFailureHandler(showError).getOAuthToken();
+    }
+
+    /**
+     * Creates a Picker that can access the user's spreadsheets. This function
+     * uses advanced options to hide the Picker's left navigation panel and
+     * default title bar.
+     *
+     * @param {string} token An OAuth 2.0 access token that lets Picker access the
+     *     file type specified in the addView call.
+     */
+    function createPicker(token) {
+      if (pickerApiLoaded && token) {
+        var picker = new google.picker.PickerBuilder()
+            // Instruct Picker to display only spreadsheets in Drive. For other
+            // views, see https://developers.google.com/picker/docs/#otherviews
+            .addView(google.picker.ViewId.SPREADSHEETS)
+            // Hide the navigation panel so that Picker fills more of the dialog.
+            .enableFeature(google.picker.Feature.NAV_HIDDEN)
+            // Hide the title bar since an Apps Script dialog already has a title.
+            .hideTitleBar()
+            .setOAuthToken(token)
+            .setDeveloperKey(DEVELOPER_KEY)
+            .setCallback(pickerCallback)
+            .setOrigin(google.script.host.origin)
+            // Instruct Picker to fill the dialog, minus 2 pixels for the border.
+            .setSize(DIALOG_DIMENSIONS.width - 2,
+                DIALOG_DIMENSIONS.height - 2)
+            .build();
+        picker.setVisible(true);
+      } else {
+        showError('Unable to load the file picker.');
+      }
+    }
+
+    /**
+     * A callback function that extracts the chosen document's metadata from the
+     * response object. For details on the response object, see
+     * https://developers.google.com/picker/docs/result
+     *
+     * @param {object} data The response object.
+     */
+    function pickerCallback(data) {
+      var action = data[google.picker.Response.ACTION];
+      if (action == google.picker.Action.PICKED) {
+        var doc = data[google.picker.Response.DOCUMENTS][0];
+        var id = doc[google.picker.Document.ID];
+        var url = doc[google.picker.Document.URL];
+        var title = doc[google.picker.Document.NAME];
+        document.getElementById('result').innerHTML =
+            '<b>You chose:</b><br>Name: <a href="' + url + '">' + title +
+            '</a><br>ID: ' + id;
+      } else if (action == google.picker.Action.CANCEL) {
+        document.getElementById('result').innerHTML = 'Picker canceled.';
+      }
+    }
+
+    /**
+     * Displays an error message within the #result element.
+     *
+     * @param {string} message The error message to display.
+     */
+    function showError(message) {
+      document.getElementById('result').innerHTML = 'Error: ' + message;
+    }
+  </script>
+  
+  <script src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
+</body>
+</html>
+
