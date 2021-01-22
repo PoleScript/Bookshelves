@@ -1,27 +1,33 @@
-<!--
-<div class="add-customer-form">
-  <div class="form-group">
-    <label for="first-name">Prénom</label>
-    <input type="text" class="form-control" id="first-name">
-  </div>
-  <div class="form-group">
-    <label for="last-name">Nom</label>
-    <input type="text" class="form-control" id="last-name">
-  </div>
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input type="text" class="form-control" id="email">
-  </div>
-  <button class="btn btn-primary">Ajouter un Contact</button>
-</div>
---><!--
-<center>
-  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdyVO9lYFKsR9QWl7XQaqIA6fbYIuV8EU8rVv9BajwEKYlk4Q/viewform?embedded=true" width="640" height="617" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-</center>
--->
-<br/>
-<button class="btn btn-primary"  onclick="loadSearchView()" >Back</button>
-<center>
+<!DOCTYPE html>
+<html>
+  <head>
+      <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">    
+    <!-- Bootstrap CSS --> 
+    <style>
+       .nav-link {
+          cursor:pointer;
+       }
+       body {
+         font-family: 'Roboto', sans-serif;
+       }
+       label .active{
+         background-color: green;
+       }
+       hr {
+         margin: 0;
+         padding: 0; 
+       }
+    </style>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <base target="_top">
+  </head>
+  <body>
+    <center>
   <select class="custom-select my-1 mr-sm-2" aria-label="Default select example" style="display: inline-block; width: 25%; margin: 20px;">
      <option selected="selected">Choose country..</option>
      <option value="Afganistan">Afghanistan</option>
@@ -285,7 +291,7 @@
 <center>
 <div id="lesPhotos">
 </div>
-<a href="#" ><img  id="plus" src="https://drive.google.com/uc?export=download&id=1_6V1RWV-DsRsPvsZ25QORkDA5vSMxnyS" alt="More Photo" width="5%" onclick="addPhoto()"></a>
+<a href="#" ><img  id="plus" src="https://drive.google.com/uc?export=download&id=1_6V1RWV-DsRsPvsZ25QORkDA5vSMxnyS" alt="More Photo" width="5%"></a>
 </center>
   <div>
         <p id='result'></p>
@@ -306,15 +312,7 @@
         <textarea class="form-control" placeHolder="Comment the photo" rows="3"></textarea>
     </div>
   </div>
-  <div class="form-check">
-      <input class="form-check-input social" type="checkbox" value="" id="socials" required>
-      <label class="form-check-label" for="socials">
-        For social Media
-      </label>
-    </div>
-</template><!--
 
-  
   <div class="input-group mb-3" style="margin: 20px 0">
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="inputGroupFile02" onchange="handleFiles(this.files)">
@@ -341,4 +339,8 @@
       </label>
       </div>
         <hr/>
--->
+</template>
+  </body>
+</html>
+
+
