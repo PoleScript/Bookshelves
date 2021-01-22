@@ -283,9 +283,10 @@
 </center>
 
 <center>
-<div id="lesPhotos">
+<br>
+<div id="lesPhotos" class="card-columns">
 </div>
-<a href="#" ><img  id="plus" src="https://drive.google.com/uc?export=download&id=1_6V1RWV-DsRsPvsZ25QORkDA5vSMxnyS" alt="More Photo" width="5%" onclick="addPhoto()"></a>
+<a href="#" ><img id="plus" src="https://drive.google.com/uc?export=download&id=1_6V1RWV-DsRsPvsZ25QORkDA5vSMxnyS" alt="More Photo" width="5%"></a>
 </center>
   <div>
         <p id='result'></p>
@@ -293,9 +294,9 @@
 
 
 <template id="photo">
-  <div class="card" style="width: 18rem;padding:1rem;">
+  <div class="card" style="width: 18rem;padding:1rem;" >
     <div class="card-title">
-      <center><a href="#" onclick="chooseFile();"><img class="card-img-top" src="https://drive.google.com/uc?export=download&id=1YG-SO8jPCQVDrguVbHz6hwcvpb1o4Yez" alt="Click to pick a photo"></a></center>
+      <center><a href="#" onclick="chooseFile()"><img class="card-img-top" src="https://drive.google.com/uc?export=download&id=1YG-SO8jPCQVDrguVbHz6hwcvpb1o4Yez" alt="Click to pick a photo"></a></center>
     </div>
     <div class="card-body" style="margin:0;padding:0;">
       <select class="custom-select my-1 mr-sm-2" aria-label="Default select example">
@@ -305,13 +306,14 @@
         </select> 
         <textarea class="form-control" placeHolder="Comment the photo" rows="3"></textarea>
     </div>
-  </div>
-  <div class="form-check">
+    <br>
+    <div class="form-check">
       <input class="form-check-input social" type="checkbox" value="" id="socials" required>
       <label class="form-check-label" for="socials">
         For social Media
       </label>
     </div>
+  </div>  
 </template><!--
 
   
