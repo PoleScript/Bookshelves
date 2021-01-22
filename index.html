@@ -118,9 +118,14 @@
     function clickEventHandler(e){
        if(e.target.matches("#plus")){
           duplicateImg();
+          onApiLoad();
        }
     }
-
+    
+    function addPhoto(){
+      duplicateImg();
+      onApiLoad();
+    }
     function duplicateImg(){ 
       var templateBox = document.getElementById("photo");
       var template = templateBox.content;
